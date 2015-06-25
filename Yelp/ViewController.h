@@ -2,7 +2,7 @@
 //  ViewController.h
 //  Yelp
 //
-//  Created by Taco Chang on 2015/6/24.
+//  Created by Taco Chang on 2015/6/25.
 //  Copyright (c) 2015年 Taco Chang. All rights reserved.
 //
 
@@ -10,6 +10,4 @@
 
 @interface ViewController : UIViewController
 
-
 @end
-
