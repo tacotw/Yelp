@@ -75,7 +75,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xBp-6g-LKi">
-                                            <rect key="frame" x="86" y="64" width="43" height="12"/>
+                                            <rect key="frame" x="86" y="64" width="506" height="12"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
@@ -94,6 +94,7 @@
                                         <constraint firstItem="Qc3-tw-Xgv" firstAttribute="leading" secondItem="cDb-gA-DnV" secondAttribute="trailing" constant="8" id="LC3-yw-zX4"/>
                                         <constraint firstAttribute="trailing" secondItem="Var-pI-cqz" secondAttribute="trailing" constant="8" id="PVz-cs-Hri"/>
                                         <constraint firstItem="xCO-Ng-IMg" firstAttribute="top" secondItem="egg-jw-6Qb" secondAttribute="bottom" constant="6" id="QhB-8R-i0B"/>
+                                        <constraint firstAttribute="trailing" secondItem="xBp-6g-LKi" secondAttribute="trailing" constant="8" id="Sf8-Au-Z5T"/>
                                         <constraint firstItem="Var-pI-cqz" firstAttribute="leading" secondItem="egg-jw-6Qb" secondAttribute="trailing" constant="8" id="ZDe-6e-RDY"/>
                                         <constraint firstItem="xBp-6g-LKi" firstAttribute="top" secondItem="Qc3-tw-Xgv" secondAttribute="bottom" constant="4" id="di8-7F-zxI"/>
                                         <constraint firstItem="cDb-gA-DnV" firstAttribute="top" secondItem="WlP-hd-hY3" secondAttribute="top" constant="8" id="e2k-ti-ksq"/>
@@ -215,7 +216,9 @@
                                         <constraint firstItem="CDL-D9-MAa" firstAttribute="top" secondItem="Tyy-8f-dfR" secondAttribute="top" constant="7" id="raI-n9-Ipz"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <gestureRecognizers/>
                                 <connections>
+                                    <outlet property="iconView" destination="CDL-D9-MAa" id="HF1-iN-Rfv"/>
                                     <outlet property="nameLabel" destination="CZL-hp-QWD" id="5L4-er-Air"/>
                                 </connections>
                             </tableViewCell>

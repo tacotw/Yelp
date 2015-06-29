@@ -12,13 +12,15 @@
 
 @interface FilterTableViewController () <UITabBarDelegate, UITableViewDataSource, SwitchCellDelegate>
 
-@property (nonatomic, strong) NSArray *categoryTitle;
-@property (nonatomic, strong) NSArray *categoryQuery;
 @property (nonatomic, strong) NSMutableArray *categorySwitch;
 @property (nonatomic, readonly) NSDictionary *filters;
 @property (nonatomic, strong) NSArray *categories;
+@property (nonatomic, strong) NSArray *sortData;
+@property (nonatomic, strong) NSArray *distanceData;
 @property (nonatomic, strong) NSMutableSet *selectedCategories;
 @property (nonatomic, strong) NSUserDefaults *defaults;
+@property (nonatomic, assign) NSInteger selectedSort;
+@property (nonatomic, assign) NSInteger selectedDistance;
 
 - (IBAction)onApply:(id)sender;
 - (IBAction)onCancel:(id)sender;
@@ -75,10 +77,10 @@
             rows = 1;
             break;
         case 1:
-            rows = 1;
+            rows = self.distanceData.count;
             break;
         case 2:
-            rows = 1;
+            rows = self.sortData.count;
             break;
         case 3:
             rows = 4;
@@ -123,12 +125,22 @@
             sCell.delegate = self;
             return sCell;
         case 1:
-            lCell.nameLabel.text = @"Auto";
-            //lCell.delegate = self;
+            lCell.nameLabel.text = self.distanceData[indexPath.row][@"name"];
+            if (indexPath.row == 0) {
+                lCell.iconView.image = [UIImage imageNamed:@"listCellIcon"];
+            }
+            else {
+                lCell.iconView.image = (self.selectedDistance == indexPath.row) ? [UIImage imageNamed:@"selected"] : [UIImage imageNamed:@"unselected"];
+            }
             return lCell;
         case 2:
-            lCell.nameLabel.text = @"Auto";
-            //lCell.delegate = self;
+            lCell.nameLabel.text = self.sortData[indexPath.row][@"name"];
+            if (indexPath.row == 0) {
+                lCell.iconView.image = [UIImage imageNamed:@"listCellIcon"];
+            }
+            else {
+                lCell.iconView.image = (self.selectedSort == indexPath.row) ? [UIImage imageNamed:@"selected"] : [UIImage imageNamed:@"unselected"];
+            }
             return lCell;
         case 3:
             sCell.nameLabel.text = self.categories[indexPath.row][@"name"];
@@ -143,9 +155,33 @@
 
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
+    switch (indexPath.section) {
+        case 1:
+            for (NSInteger i=1; i<self.distanceData.count; i++) {
+                ListCell *cell = (ListCell *)[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
+                cell.iconView.image = (indexPath.row == i) ? [UIImage imageNamed:@"selected"] : [UIImage imageNamed:@"unselected"];
+            }
+            self.selectedDistance = indexPath.row;
+            break;
+        case 2:
+            for (NSInteger i=1; i<self.sortData.count; i++) {
+                ListCell *cell = (ListCell *)[tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
+                cell.iconView.image = (indexPath.row == i) ? [UIImage imageNamed:@"selected"] : [UIImage imageNamed:@"unselected"];
+            }
+            self.selectedSort = indexPath.row;
+            break;
+        case 0:
+        case 3:
+        default:
+            break;
+    }
+}
+
 - (IBAction)onApply:(id)sender {
     [self.delegate FilterTableViewController:self didChangeFilters:self.filters];
-    NSLog(@"Filter");
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -164,9 +200,28 @@
                         @{@"name" : @"Aquariums",
                           @"code" : @"aquariums"}
                         ];
-    
-    self.categoryTitle = @[@"ATV Rentals/Tours", @"Amateur Sports Teams", @"Amusement Parks", @"Aquariums"];
-    self.categoryQuery = @[@"atvrentals", @"amateursportsteams", @"amusementparks", @"aquariums"];
+    self.sortData = @[
+                  @{@"name" : @"Auto",
+                    @"code" : @"0"},
+                  @{@"name" : @"Best matched",
+                    @"code" : @"0"},
+                  @{@"name" : @"Distance",
+                    @"code" : @"1"},
+                  @{@"name" : @"Highest Rated",
+                    @"code" : @"2"}
+                  ];
+    self.distanceData = @[
+                      @{@"name" : @"Auto",
+                        @"code" : @"0"},
+                      @{@"name" : @"0.3 miles",
+                        @"code" : @"483"},
+                      @{@"name" : @"1 mile",
+                        @"code" : @"1610"},
+                      @{@"name" : @"5 miles",
+                        @"code" : @"8047"}/*,
+                      @{@"name" : @"20 miles",
+                        @"code" : @"32187"}*/
+                      ];
 }
 
 - (NSDictionary *)filters {
@@ -181,11 +236,19 @@
         NSString *categoryFilter = [names componentsJoinedByString:@","];
         [filters setObject:categoryFilter forKey:@"category_filter"];
     }
+    if (self.selectedDistance) {
+        [filters setObject:self.distanceData[self.selectedDistance][@"code"] forKey:@"radius_filter"];
+    }
+    if (self.selectedSort) {
+        [filters setObject:self.sortData[self.selectedSort][@"code"] forKey:@"sort"];
+    }
     
     return filters;
 }
 
 - (void) loadSettings {
+    self.selectedSort = [self.defaults integerForKey:@"sort"];
+    self.selectedDistance = [self.defaults integerForKey:@"distance"];
     for (int i=0; i<4; i++) {
         BOOL b = [self.defaults boolForKey:[NSString stringWithFormat:@"category%d", i]];
         [self.categorySwitch replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:b]];
@@ -193,10 +256,11 @@
 }
 
 - (void) saveSettings {
+    [self.defaults setInteger:self.selectedSort forKey:@"sort"];
+    [self.defaults setInteger:self.selectedDistance forKey:@"distance"];
     for (int i=0; i<4; i++) {
         BOOL b = [self.categorySwitch[i] boolValue];
         [self.defaults setBool:b forKey:[NSString stringWithFormat:@"category%d", i]];
-        NSLog(@"category%d: %s", i, b? "Y":"N");
     }
     [self.defaults synchronize];
 }
