@@ -23,9 +23,15 @@
         
         self.name = dictionary[@"name"];
         self.imageUrl = dictionary[@"image_url"];
-        NSString *street = [dictionary valueForKeyPath:@"location.address"][0];
-        NSString *neighborhood = [dictionary valueForKeyPath:@"location.neighborhoods"][0];
-        self.address = [NSString stringWithFormat:@"%@, %@", street, neighborhood];
+        NSArray *addressArray = [dictionary valueForKeyPath:@"location.display_address"];
+        NSMutableString *address = [[NSMutableString alloc] init];
+        for (int i=0; i<addressArray.count; i++) {
+            [address appendString:addressArray[i]];
+            if (i >= 1) {
+                [address appendFormat:@", %@", addressArray[i]];
+            }
+        }
+        self.address = address;
         
         self.numReviews = [dictionary[@"review_count"] integerValue];
         self.ratingImageUrl = dictionary[@"rating_img_url"];

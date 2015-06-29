@@ -18,6 +18,7 @@
 @property (nonatomic, readonly) NSDictionary *filters;
 @property (nonatomic, strong) NSArray *categories;
 @property (nonatomic, strong) NSMutableSet *selectedCategories;
+@property (nonatomic, strong) NSUserDefaults *defaults;
 
 - (IBAction)onApply:(id)sender;
 - (IBAction)onCancel:(id)sender;
@@ -35,7 +36,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    self.defaults = [NSUserDefaults standardUserDefaults];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -45,11 +46,10 @@
     
     self.categorySwitch = [NSMutableArray array];
     for (int i=0; i<4; i++) {
-        BOOL b = [defaults boolForKey:[NSString stringWithFormat:@"category%ld", (long)i]];
-        [self.categorySwitch addObject:[NSNumber numberWithBool:b]];
-//        NSInteger value = [defaults integerForKey:[NSString stringWithFormat:@"category%ld", (long)i]];
-//        [self.categorySwitch addObject:value];//[NSNumber numberWithInt:value]];
+        //BOOL b = [self.defaults boolForKey:[NSString stringWithFormat:@"category%d", i]];
+        [self.categorySwitch addObject:[NSNumber numberWithBool:false]];
     }
+    [self loadSettings];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
 }
@@ -133,7 +133,7 @@
         case 3:
             sCell.nameLabel.text = self.categories[indexPath.row][@"name"];
             sCell.controlSwitch.on = [[self.categorySwitch objectAtIndex:indexPath.row] boolValue];
-            sCell.on = [self.selectedCategories containsObject:self.categories[indexPath.row]];
+            sCell.on = [self.categorySwitch[indexPath.row] boolValue];//[self.selectedCategories containsObject:self.categories[indexPath.row]];
             sCell.delegate = self;
             return sCell;
             
@@ -172,6 +172,7 @@
 - (NSDictionary *)filters {
     NSMutableDictionary *filters = [NSMutableDictionary dictionary];
     
+    [self saveSettings];
     if (self.selectedCategories.count > 0) {
         NSMutableArray *names = [NSMutableArray array];
         for (NSDictionary *category in self.selectedCategories) {
@@ -184,11 +185,28 @@
     return filters;
 }
 
+- (void) loadSettings {
+    for (int i=0; i<4; i++) {
+        BOOL b = [self.defaults boolForKey:[NSString stringWithFormat:@"category%d", i]];
+        [self.categorySwitch replaceObjectAtIndex:i withObject:[NSNumber numberWithBool:b]];
+    }
+}
+
+- (void) saveSettings {
+    for (int i=0; i<4; i++) {
+        BOOL b = [self.categorySwitch[i] boolValue];
+        [self.defaults setBool:b forKey:[NSString stringWithFormat:@"category%d", i]];
+        NSLog(@"category%d: %s", i, b? "Y":"N");
+    }
+    [self.defaults synchronize];
+}
+
 #pragma mark - Switch cell delegate methods
 
 - (void)switchCell:(SwitchCell *)cell didUpdateValue:(BOOL)value {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     
+    [self.categorySwitch replaceObjectAtIndex:indexPath.row withObject:[NSNumber numberWithBool:value]];
     if (value) {
         [self.selectedCategories addObject:self.categories[indexPath.row]];
     }

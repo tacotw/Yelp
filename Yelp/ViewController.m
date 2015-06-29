@@ -20,9 +20,11 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 @interface ViewController () <UITabBarDelegate, UITableViewDataSource, FilterTableViewControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (nonatomic, strong) YelpClient *client;
 @property (nonatomic, strong) NSArray *businesses;
-@property (nonatomic, strong) NSString *query;
+//@property (nonatomic, strong) NSString *query;
+@property (nonatomic, strong) NSMutableString *query;
 @property (nonatomic, strong) NSDictionary *filters;
 
 @end
@@ -32,11 +34,11 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UISearchBar *searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0,0, 250,44)];
-    searchBar.placeholder = @"Restaurants";
-    UIBarButtonItem *searchBarItem = [[UIBarButtonItem alloc]initWithCustomView:searchBar];
+    self.searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0,0, 250,44)];
+    self.searchBar.placeholder = @"Restaurants";
+    UIBarButtonItem *searchBarItem = [[UIBarButtonItem alloc]initWithCustomView:self.searchBar];
     self.navigationItem.leftBarButtonItem = searchBarItem;
-    searchBar.delegate = (id) self;
+    self.searchBar.delegate = (id) self;
     
     self.tableView.delegate = (id) self;
     self.tableView.dataSource = self;
@@ -45,17 +47,17 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     
     self.filters = nil;
+    self.query = [[NSMutableString alloc] initWithString:@""];
     
-    [self doSearch:@"" params:self.filters];
+    // You can register for Yelp API keys here: http://www.yelp.com/developers/manage_api_keys
+    self.client = [[YelpClient alloc] initWithConsumerKey:kYelpConsumerKey consumerSecret:kYelpConsumerSecret accessToken:kYelpToken accessSecret:kYelpTokenSecret];
+    [self doSearch:self.query params:self.filters];
 }
 
 - (void)doSearch:(NSString *)query params:(NSDictionary *)params {
     
-    // You can register for Yelp API keys here: http://www.yelp.com/developers/manage_api_keys
-    self.client = [[YelpClient alloc] initWithConsumerKey:kYelpConsumerKey consumerSecret:kYelpConsumerSecret accessToken:kYelpToken accessSecret:kYelpTokenSecret];
-    
     [self.client searchWithTerm:query params:params success:^(AFHTTPRequestOperation *operation, id response) {
-        //NSLog(@"response: %@", response);
+//        NSLog(@"response: %@", response);
         NSArray *businessDictionaries = response[@"businesses"];
         
         self.businesses = [Business businessWithDictionaries:businessDictionaries];
@@ -83,7 +85,8 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 
 -(void)searchBar:(UISearchBar*)searchBar textDidChange:(NSString*)text
 {
-    self.query = text;
+//    self.query = text;
+    [self.query setString:text];
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
@@ -108,10 +111,10 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 }
 
 - (void)FilterTableViewController:(FilterTableViewController *)FilterTableViewController didChangeFilters:(NSDictionary *)filters {
-    self.query = @"";
+    [self.query setString:@""];
     self.filters = filters;
+    self.searchBar.text = @"";
     [self doSearch:self.query params:filters];
-    NSLog(@"!!!: %@", filters);
 }
 
 /*
