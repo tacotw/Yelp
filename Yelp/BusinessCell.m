@@ -40,6 +40,7 @@
     self.ratingLabel.text = [NSString stringWithFormat:@"%ld Reviews", (long)self.business.numReviews];
     self.adressLabel.text = self.business.address;
     self.distanceLabel.text = [NSString stringWithFormat:@"%.2f mi", self.business.distance];
+    self.categoryLabel.text = self.business.categories;
 }
 
 @end

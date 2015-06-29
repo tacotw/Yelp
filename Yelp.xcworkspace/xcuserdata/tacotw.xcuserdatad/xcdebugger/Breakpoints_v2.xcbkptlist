@@ -24,12 +24,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Yelp/FilterTableViewController.m"
-            timestampString = "456928033.84397"
+            timestampString = "457010567.168905"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
-            landmarkName = "-viewDidLoad"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "-numberOfSectionsInTableView:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -40,12 +40,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Yelp/FilterTableViewController.m"
-            timestampString = "456928062.390292"
+            timestampString = "457010567.168905"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
-            landmarkName = "-viewDidLoad"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "-numberOfSectionsInTableView:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

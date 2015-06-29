@@ -10,18 +10,20 @@
 #import "YelpClient.h"
 #import "Business.h"
 #import "BusinessCell.h"
+#import "FilterTableViewController.h"
 
 NSString * const kYelpConsumerKey = @"vxKwwcR_NMQ7WaEiQBK_CA";
 NSString * const kYelpConsumerSecret = @"33QCvh5bIF5jIHR5klQr7RtBDhQ";
 NSString * const kYelpToken = @"uRcRswHFYa1VkDrGV6LAW2F8clGh5JHV";
 NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 
-@interface ViewController () <UITabBarDelegate, UITableViewDataSource>
+@interface ViewController () <UITabBarDelegate, UITableViewDataSource, FilterTableViewControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) YelpClient *client;
 @property (nonatomic, strong) NSArray *businesses;
 @property (nonatomic, strong) NSString *query;
+@property (nonatomic, strong) NSDictionary *filters;
 
 @end
 
@@ -31,7 +33,7 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     [super viewDidLoad];
     
     UISearchBar *searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0,0, 250,44)];
-    searchBar.placeholder = @"Search";
+    searchBar.placeholder = @"Restaurants";
     UIBarButtonItem *searchBarItem = [[UIBarButtonItem alloc]initWithCustomView:searchBar];
     self.navigationItem.leftBarButtonItem = searchBarItem;
     searchBar.delegate = (id) self;
@@ -42,15 +44,17 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
     self.tableView.estimatedRowHeight = 100;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     
-    [self doSearch:@""];
+    self.filters = nil;
+    
+    [self doSearch:@"" params:self.filters];
 }
 
-- (void)doSearch:(NSString *)query {
+- (void)doSearch:(NSString *)query params:(NSDictionary *)params {
     
     // You can register for Yelp API keys here: http://www.yelp.com/developers/manage_api_keys
     self.client = [[YelpClient alloc] initWithConsumerKey:kYelpConsumerKey consumerSecret:kYelpConsumerSecret accessToken:kYelpToken accessSecret:kYelpTokenSecret];
     
-    [self.client searchWithTerm:query success:^(AFHTTPRequestOperation *operation, id response) {
+    [self.client searchWithTerm:query params:params success:^(AFHTTPRequestOperation *operation, id response) {
         //NSLog(@"response: %@", response);
         NSArray *businessDictionaries = response[@"businesses"];
         
@@ -80,17 +84,11 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 -(void)searchBar:(UISearchBar*)searchBar textDidChange:(NSString*)text
 {
     self.query = text;
-    if(text.length > 0)
-    {
-        //[self doSearch:text];
-        NSLog(@"%@", text);
-//        [self fetchBusinessWithQuery:text params:self.filters];
-    }
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    [self doSearch:self.query];
+    [self doSearch:self.query params:self.filters];
     [searchBar resignFirstResponder];
     // You can write search code Here
 }
@@ -98,6 +96,22 @@ NSString * const kYelpTokenSecret = @"mqtKIxMIR4iBtBPZCmCLEb-Dz3Y";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+
+#pragma mark - Filter delegate methods
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    UINavigationController *navVC = segue.destinationViewController;
+    FilterTableViewController *filterVC = (FilterTableViewController *) navVC.topViewController;
+    filterVC.delegate = self;
+}
+
+- (void)FilterTableViewController:(FilterTableViewController *)FilterTableViewController didChangeFilters:(NSDictionary *)filters {
+    self.query = @"";
+    self.filters = filters;
+    [self doSearch:self.query params:filters];
+    NSLog(@"!!!: %@", filters);
 }
 
 /*

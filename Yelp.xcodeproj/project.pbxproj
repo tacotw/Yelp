@@ -17,6 +17,9 @@
 		011CB7571B3ACC5300CD86F4 /* BusinessCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 011CB7561B3ACC5300CD86F4 /* BusinessCell.m */; };
 		018B15B31B3ABBDF005CB77C /* YelpClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 018B15B21B3ABBDF005CB77C /* YelpClient.m */; };
 		01DE4C5E1B3BF540002AB6B1 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DE4C5D1B3BF540002AB6B1 /* ViewController.m */; };
+		01DE4C6D1B3CF4A5002AB6B1 /* SwitchCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DE4C6C1B3CF4A5002AB6B1 /* SwitchCell.m */; };
+		01DE4C701B3CF4B7002AB6B1 /* ListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DE4C6F1B3CF4B7002AB6B1 /* ListCell.m */; };
+		01DE4C731B3CF77C002AB6B1 /* FilterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01DE4C721B3CF77C002AB6B1 /* FilterTableViewController.m */; };
 		E36A172EB5093F9B00A49B6B /* libPods-Yelp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F9BD1C936C53956C6807527 /* libPods-Yelp.a */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +53,12 @@
 		018B15B21B3ABBDF005CB77C /* YelpClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YelpClient.m; sourceTree = "<group>"; };
 		01DE4C5C1B3BF540002AB6B1 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		01DE4C5D1B3BF540002AB6B1 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		01DE4C6B1B3CF4A5002AB6B1 /* SwitchCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwitchCell.h; sourceTree = "<group>"; };
+		01DE4C6C1B3CF4A5002AB6B1 /* SwitchCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwitchCell.m; sourceTree = "<group>"; };
+		01DE4C6E1B3CF4B7002AB6B1 /* ListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListCell.h; sourceTree = "<group>"; };
+		01DE4C6F1B3CF4B7002AB6B1 /* ListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListCell.m; sourceTree = "<group>"; };
+		01DE4C711B3CF77C002AB6B1 /* FilterTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilterTableViewController.h; sourceTree = "<group>"; };
+		01DE4C721B3CF77C002AB6B1 /* FilterTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterTableViewController.m; sourceTree = "<group>"; };
 		0F9BD1C936C53956C6807527 /* libPods-Yelp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Yelp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		473B820F63DB3C63A90787BB /* Pods-Yelp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Yelp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Yelp/Pods-Yelp.debug.xcconfig"; sourceTree = "<group>"; };
 		C2B313AF3F314F51BB639E45 /* Pods-Yelp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Yelp.release.xcconfig"; path = "Pods/Target Support Files/Pods-Yelp/Pods-Yelp.release.xcconfig"; sourceTree = "<group>"; };
@@ -109,6 +118,12 @@
 				011CB7561B3ACC5300CD86F4 /* BusinessCell.m */,
 				01DE4C5C1B3BF540002AB6B1 /* ViewController.h */,
 				01DE4C5D1B3BF540002AB6B1 /* ViewController.m */,
+				01DE4C6B1B3CF4A5002AB6B1 /* SwitchCell.h */,
+				01DE4C6C1B3CF4A5002AB6B1 /* SwitchCell.m */,
+				01DE4C6E1B3CF4B7002AB6B1 /* ListCell.h */,
+				01DE4C6F1B3CF4B7002AB6B1 /* ListCell.m */,
+				01DE4C711B3CF77C002AB6B1 /* FilterTableViewController.h */,
+				01DE4C721B3CF77C002AB6B1 /* FilterTableViewController.m */,
 			);
 			path = Yelp;
 			sourceTree = "<group>";
@@ -310,9 +325,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				01DE4C5E1B3BF540002AB6B1 /* ViewController.m in Sources */,
+				01DE4C701B3CF4B7002AB6B1 /* ListCell.m in Sources */,
 				011CB7541B3AC18B00CD86F4 /* Business.m in Sources */,
 				018B15B31B3ABBDF005CB77C /* YelpClient.m in Sources */,
+				01DE4C6D1B3CF4A5002AB6B1 /* SwitchCell.m in Sources */,
 				010EDC521B3AB5B3000D20E9 /* AppDelegate.m in Sources */,
+				01DE4C731B3CF77C002AB6B1 /* FilterTableViewController.m in Sources */,
 				010EDC4F1B3AB5B3000D20E9 /* main.m in Sources */,
 				011CB7571B3ACC5300CD86F4 /* BusinessCell.m in Sources */,
 			);
